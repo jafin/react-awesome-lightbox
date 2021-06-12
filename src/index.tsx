@@ -1,11 +1,22 @@
 import React, { ReactNode } from "react";
+import { LightboxProps } from "./LightboxProps";
 
 const DEFAULT_ZOOM_STEP = 0.3;
 const DEFAULT_LARGE_ZOOM = 4;
-function getXY(e: any) {
+
+function isTouchEvent(
+  e: React.TouchEvent | React.MouseEvent,
+): e is React.TouchEvent {
+  return e && "touches" in e;
+}
+
+function getXY(
+  e: React.MouseEvent<HTMLImageElement, MouseEvent> | React.TouchEvent,
+) {
   let x = 0;
   let y = 0;
-  if (e.touches && e.touches.length) {
+
+  if (isTouchEvent(e)) {
     x = e.touches[0].pageX;
     y = e.touches[0].pageY;
   } else {
@@ -14,28 +25,17 @@ function getXY(e: any) {
   }
   return { x, y };
 }
-function Cond(props: any) {
+
+type CondProps = {
+  condition: boolean;
+  children?: ReactNode;
+};
+
+function Cond(props: CondProps) {
   if (!props.condition) return null;
   return <React.Fragment>{props.children}</React.Fragment>;
 }
 
-interface LightboxProps {
-  startIndex?: number;
-  images?: any;
-  image: any;
-  keyboardInteraction?: boolean;
-  zoomStep?: number;
-  allowZoom?: boolean;
-  doubleClickZoom?: number;
-  allowRotate?: boolean;
-  buttonAlign?: string;
-  showTitle?: boolean;
-  allowReset?: boolean;
-  clickOutsideToExit?: boolean;
-  title?: string;
-  onClose?(e: any): void;
-  children?: ReactNode;
-}
 export default class Lightbox extends React.Component<LightboxProps, {}> {
   initX = 0;
   initY = 0;
@@ -54,8 +54,9 @@ export default class Lightbox extends React.Component<LightboxProps, {}> {
   };
   createTransform = (x: number, y: number, zoom: number, rotate: number) =>
     `translate3d(${x}px,${y}px,0px) scale(${zoom}) rotate(${rotate}deg)`;
-  stopSideEffect = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) =>
-    e.stopPropagation();
+  stopSideEffect = (
+    e: React.MouseEvent<HTMLElement, MouseEvent> | KeyboardEvent,
+  ) => e.stopPropagation();
   getCurrentImage = (
     s: {
       x?: number;
@@ -111,7 +112,7 @@ export default class Lightbox extends React.Component<LightboxProps, {}> {
   };
   navigateImage = (
     direction: string,
-    e: any, //React.MouseEvent<HTMLDivElement, MouseEvent>
+    e: React.MouseEvent<HTMLDivElement, MouseEvent> | KeyboardEvent, //React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     this.stopSideEffect(e);
     let current = 0;
@@ -180,27 +181,26 @@ export default class Lightbox extends React.Component<LightboxProps, {}> {
         break;
     }
   };
-  reset = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
+  reset = (e: React.MouseEvent<HTMLElement, MouseEvent>  | KeyboardEvent) => {
     this.stopSideEffect(e);
     this.setState({ x: 0, y: 0, zoom: 1, rotate: 0 });
   };
-  exit = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  exit = (e: React.MouseEvent<HTMLDivElement, MouseEvent> | KeyboardEvent) => {
     if (typeof this.props.onClose === "function") return this.props.onClose(e);
     console.error(
       "No Exit function passed on prop: onClose. Clicking the close button will do nothing",
     );
   };
-  shouldShowReset = () =>
-    this.state.x ||
-    this.state.y ||
+  shouldShowReset = (): boolean =>
+    this.state.x > 0 ||
+    this.state.y > 0 ||
     this.state.zoom !== 1 ||
     this.state.rotate !== 0;
   canvasClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     let { clickOutsideToExit = true } = this.props;
     if (clickOutsideToExit && this.state.zoom <= 1) return this.exit(e);
   };
-  //React.MouseEvent<HTMLDivElement, MouseEvent>
-  keyboardNavigation = (e: any) => {
+  keyboardNavigation = (e: KeyboardEvent) => {
     let { allowZoom = true, allowReset = true } = this.props;
     let { multi, x, y, zoom } = this.state;
     switch (e.key) {
@@ -246,7 +246,7 @@ export default class Lightbox extends React.Component<LightboxProps, {}> {
     let image = this.getCurrentImage(this.state, this.props);
     let title = this.getCurrentTitle(this.state, this.props);
     if (!image) {
-      console.warn("Not showing lightbox because no image(s) was supplied");
+      console.warn("Not showing lightbox because no image was supplied.");
       return null;
     }
     let {

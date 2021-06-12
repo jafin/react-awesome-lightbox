@@ -8,7 +8,7 @@
       "importHelpers": true,
       "declaration": true,
       "sourceMap": true,
-      "rootDir": "./",
+      "rootDir": "./src",
       "strict": true,
       "noImplicitAny": true,
       "allowSyntheticDefaultImports": true, // turn on allowSyntheticDefaultImports

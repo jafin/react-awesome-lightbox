@@ -20,8 +20,9 @@
     },
     "scripts": {
         "start": "cd example && npm run start",
-        "startOld": "webpack --watch",
-        "build": "webpack"
+        "build": "npm run prepare",
+        "postbuild": "cpy '*.css' ../dist --cwd=src/",
+        "prepare": "tsdx build"
     },
     "author": {
         "name": "Anam Ahmed",
@@ -34,6 +35,7 @@
         "@types/react": "^17.0.11",
         "@types/react-dom": "^17.0.7",
         "babel-loader": "8.1.0",
+        "cpy-cli": "^3.1.1",
         "file-loader": "4.3.0",
         "react": "*",
         "tsdx": "^0.14.1",
