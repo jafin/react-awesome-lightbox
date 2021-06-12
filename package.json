@@ -1,5 +1,6 @@
 {
     "name": "react-awesome-lightbox",
+    "licence": "MIT",
     "version": "1.8.0",
     "description": "lightbox image viewer for react with zoom, rotate. Single or multi image mode and touch support",
     "keywords": [
@@ -15,10 +16,11 @@
     ],
     "main": "build/index.js",
     "peerDependencies": {
-        "react": "^16||^17"
+        "react": "^17.0.2"
     },
     "scripts": {
-        "start": "webpack --watch",
+        "start": "cd example && npm run start",
+        "startOld": "webpack --watch",
         "build": "webpack"
     },
     "author": {
@@ -27,12 +29,18 @@
     },
     "devDependencies": {
         "@babel/core": "^7.10.4",
-        "babel-loader": "8.1.0",
-        "file-loader": "4.3.0",
-        "url-loader": "2.3.0",
-        "webpack": "4.42.0",
         "@babel/preset-env": "^7.10.4",
         "@babel/preset-react": "^7.10.4",
+        "@types/react": "^17.0.11",
+        "@types/react-dom": "^17.0.7",
+        "babel-loader": "8.1.0",
+        "file-loader": "4.3.0",
+        "react": "*",
+        "tsdx": "^0.14.1",
+        "tslib": "^2.3.0",
+        "typescript": "^4.3.2",
+        "url-loader": "2.3.0",
+        "webpack": "4.42.0",
         "webpack-cli": "^3.3.12"
     },
     "babel": {
@@ -60,6 +68,5 @@
     "repository": {
         "type": "git",
         "url": "git@github.com:theanam/react-awesome-lightbox.git"
-    },
-    "dependencies": {}
+    }
 }
