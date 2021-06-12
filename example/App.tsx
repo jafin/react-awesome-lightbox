@@ -1,8 +1,6 @@
 import React = require("react");
 import Lightbox from "../src/index";
 
-const lb = new Lightbox();
-
 export const App = (): JSX.Element => {
   return (
     <div>
