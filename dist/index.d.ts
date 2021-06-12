@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { LightboxProps } from "./LightboxProps";
 export default class Lightbox extends React.Component<LightboxProps, {}> {
     initX: number;

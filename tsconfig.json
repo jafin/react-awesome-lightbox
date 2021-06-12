@@ -11,7 +11,7 @@
       "rootDir": "./src",
       "strict": true,
       "noImplicitAny": true,
-      "allowSyntheticDefaultImports": true, // turn on allowSyntheticDefaultImports
+      "allowSyntheticDefaultImports": false, // turn on allowSyntheticDefaultImports
       "strictNullChecks": true,
       "strictFunctionTypes": true,
       "strictPropertyInitialization": true,
